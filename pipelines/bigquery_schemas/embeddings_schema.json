@@ -1,0 +1,44 @@
+[
+  {
+    "name": "chunk_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Unique identifier for each text chunk"
+  },
+  {
+    "name": "note_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Identifier of the original note"
+  },
+  {
+    "name": "tenant_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Tenant to which this chunk belongs"
+  },
+  {
+    "name": "user_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Author of the note"
+  },
+  {
+    "name": "embedding",
+    "type": "FLOAT",
+    "mode": "REPEATED",
+    "description": "Vector representation of the text chunk"
+  },
+  {
+    "name": "chunk_text",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The raw text of the chunk"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Timestamp when embedding was generated"
+  }
+]

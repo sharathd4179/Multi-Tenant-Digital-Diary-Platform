@@ -1,0 +1,36 @@
+# Core Framework
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+pydantic==2.6.4
+pydantic-settings==2.1.0
+python-multipart==0.0.9
+
+# Database
+SQLAlchemy==2.0.29
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+email-validator==2.1.0
+
+# AI/ML
+langchain==0.1.14
+openai==1.24.0
+faiss-cpu==1.7.4
+
+# Caching & Rate Limiting
+redis==5.0.1
+slowapi==0.1.9
+
+# Frontend (only needed for frontend container)
+streamlit==1.33.0
+pandas==2.2.1
+matplotlib==3.8.3
+
+# Data Engineering (optional, for pipelines)
+# Uncomment if using BigQuery/Spark pipelines
+# pyspark==3.5.0
+# google-cloud-bigquery==3.17.2
+# google-cloud-storage==2.16.0
