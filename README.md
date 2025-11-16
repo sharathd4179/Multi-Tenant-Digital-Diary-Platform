@@ -1,48 +1,45 @@
 # Multi‑Tenant Digital Diary Platform with RAG‑Powered Knowledge Assistant
 
-## Overview
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-green.svg)](https://fastapi.tiangolo.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-This repository implements a full‑stack digital diary application designed for multi‑tenant deployments.  A single backend serves multiple organisations (tenants) while logically isolating each tenant’s data and configuration.  Users can create, edit, search and summarise diary entries.  A retrieval‑augmented generation (RAG) pipeline uses FAISS with a Hierarchical Navigable Small World (HNSW) index to provide fast semantic search with tenant‑aware filtering【897976156503739†L26-L32】.  Large language models (LLMs) are used to generate summaries, extract tasks and provide personalised insights.
+A production-ready, multi-tenant digital diary application with RAG-powered semantic search, task extraction, and AI-powered insights.
 
-Multi‑tenancy means that different organisations share the same application instance while keeping their data and configuration separate【471798880420436†L76-L103】.  To prevent cross‑tenant data leakage, the backend enforces tenant‑aware row‑level security and role‑based access control (RBAC)【471798880420436†L133-L156】.  Only authorised users can access their tenant’s resources.
+## 🎯 Overview
 
-## Features
+This repository implements a full‑stack digital diary application designed for multi‑tenant deployments. A single backend serves multiple organisations (tenants) while logically isolating each tenant's data and configuration. Users can create, edit, search and summarise diary entries. A retrieval‑augmented generation (RAG) pipeline uses FAISS with a Hierarchical Navigable Small World (HNSW) index to provide fast semantic search with tenant‑aware filtering. Large language models (LLMs) are used to generate summaries, extract tasks and provide personalised insights.
+
+**Multi‑tenancy** means that different organisations share the same application instance while keeping their data and configuration separate. To prevent cross‑tenant data leakage, the backend enforces tenant‑aware row‑level security and role‑based access control (RBAC). Only authorised users can access their tenant's resources.
+
+## ✨ Features
 
 ### Multi‑Tenant Diary System
 
-* **Tenants & Users:** The platform supports multiple tenants.  Each user belongs to exactly one tenant.  Two roles exist per tenant: `admin` and `user`.  Tenant administrators can manage users within their tenant, while normal users can only manage their own notes.
-* **Strict Isolation:** All database queries and vector index operations are scoped by `tenant_id`, ensuring that one tenant cannot see another tenant’s data【471798880420436†L133-L156】.
-* **Role‑Based Access Control (RBAC):** Decorators ensure that only authorised users can perform particular actions.  For example, only tenant admins can create or delete other users.
+* **Tenants & Users:** The platform supports multiple tenants. Each user belongs to exactly one tenant. Two roles exist per tenant: `admin` and `user`. Tenant administrators can manage users within their tenant, while normal users can only manage their own notes.
+* **Strict Isolation:** All database queries and vector index operations are scoped by `tenant_id`, ensuring that one tenant cannot see another tenant's data.
+* **Role‑Based Access Control (RBAC):** Decorators ensure that only authorised users can perform particular actions. For example, only tenant admins can create or delete other users.
 
 ### Diary / Notes Functionality
 
-* **CRUD Operations:** Create, read, update and delete diary entries.  Notes support titles, markdown content, tags, timestamps and optional attachments (file metadata stub).
-* **Filtering & Pagination:** List notes with filters on date ranges, tags and keywords.  Pagination is implemented for large note collections.
-* **Basic Analytics:** Endpoints return simple statistics (e.g. number of notes, last activity) per tenant.
+* **CRUD Operations:** Create, read, update and delete diary entries. Notes support titles, markdown content, tags, timestamps and optional attachments.
+* **Filtering & Pagination:** List notes with filters on date ranges, tags and keywords. Pagination is implemented for large note collections.
+* **Analytics Dashboard:** View statistics, note frequency charts, task completion progress, and top tags.
 
 ### RAG‑Powered Knowledge Assistant
 
-* **Semantic Search:** Notes are chunked into vector embeddings.  A FAISS HNSW index (using `M=32` and `ef_construction=200` by default) stores these vectors.  HNSW provides top‑performing search speeds and recall for vector similarity search【897976156503739†L26-L32】.  Searches are filtered by tenant and optionally by user, date range or tags.
-* **Summarisation & Task Extraction:** LangChain integrates OpenAI GPT‑4 (or any compatible model) to summarise individual notes, aggregates (day/week/month) and search results.  A specialised prompt extracts actionable tasks with optional due dates.  Extracted tasks are stored and can be marked as complete.
-* **Context Optimisation:** The RAG pipeline includes logic to reduce context length by de‑duplicating similar chunks, removing boilerplate and using metadata filters before vector search.  This reduces token usage during LLM calls.
-
-### Personalised Insights & Dashboard
-
-* **Analytics:** A simple analytics module computes sentiment (via a heuristic scoring function), note frequency over time and top tags.  Results are displayed in the Streamlit dashboard.
-* **Tasks:** Users can view open and completed tasks extracted from their notes.
-* **Semantic Assistant:** A chat‑like interface allows users to ask natural language questions.  The assistant retrieves relevant notes via the RAG pipeline and generates answers using GPT‑4.
-
-### Pipelines & Data Engineering
-
-* **BigQuery Schemas:** Example schema definitions for storing notes, embeddings and LLM call logs in BigQuery.  These tables support offline analytics at scale.
-* **Spark Job:** A PySpark script reads new or updated notes from BigQuery, generates embeddings in batches and writes back metadata.  It can be scheduled via cron or a cloud scheduler.
+* **Semantic Search:** Notes are chunked into vector embeddings. A FAISS HNSW index stores these vectors for fast similarity search. Searches are filtered by tenant and optionally by user, date range or tags.
+* **Summarisation & Task Extraction:** LangChain integrates OpenAI GPT‑4 to summarise notes and extract actionable tasks with optional due dates.
+* **Context Optimisation:** The RAG pipeline includes logic to reduce context length by de‑duplicating similar chunks, reducing token usage.
 
 ### Infrastructure & Deployment
 
-* **FastAPI Backend:** Provides RESTful APIs with JWT authentication.  SQLAlchemy models interact with PostgreSQL.  Redis caches retrieval results.  Tests are written with `pytest`.
-* **Streamlit Front‑End:** Implements the user interface for creating notes, searching, viewing tasks and dashboards.  The front‑end authenticates against the backend and uses the APIs.
-* **Docker & Compose:** `docker-compose.yml` orchestrates PostgreSQL, Redis, the backend and the Streamlit front‑end.  Environment variables are configured via `.env` files.
-* **Sample Data & Scripts:** Scripts are provided to seed the database with demo data, build FAISS indexes and benchmark retrieval latency.
+* **FastAPI Backend:** RESTful APIs with JWT authentication, SQLAlchemy, PostgreSQL, Redis
+* **Streamlit Frontend:** User interface for creating notes, searching, viewing tasks and dashboards
+* **Docker & Compose:** Containerized deployment with production-ready configurations
+* **CI/CD Pipeline:** Automated testing and deployment with GitHub Actions
+* **Health Monitoring:** Health check endpoints for production monitoring
 
 ## 🚀 Quick Start
 
@@ -73,7 +70,7 @@ Get started in 5 minutes! See [Quick Start Guide](docs/QUICK_START.md) for detai
 
 3. **Start services:**
    ```bash
-   cd infra
+   cd infrastructure/docker
    docker-compose up --build
    ```
 
@@ -84,54 +81,148 @@ Get started in 5 minutes! See [Quick Start Guide](docs/QUICK_START.md) for detai
 
 📚 **For detailed setup, see [Complete Setup Guide](docs/SETUP.md)**
 
-### Local Development
+## 🛠️ Development
 
-To run the backend and front‑end without Docker:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# Run database migrations (using Alembic or SQLAlchemy metadata)
-uvicorn backend.app.main:app --reload
-
-# In another terminal for Streamlit
-streamlit run frontend/streamlit_app.py
-```
-
-### Running Tests
-
-Tests are located in `backend/app/tests/`.  Use pytest to run them:
+### Installation
 
 ```bash
-pytest -q
+# Install development dependencies
+make install-dev
+
+# Or using pip
+pip install -e ".[dev]"
 ```
+
+### Development Commands
+
+```bash
+# Run tests
+make test
+
+# Format code
+make format
+
+# Lint code
+make lint
+
+# Run database migrations
+make migrate
+
+# Seed demo data
+make seed
+
+# Build FAISS indexes
+make index
+```
+
+See [Makefile](Makefile) for all available commands.
+
+### Project Structure
+
+```
+multi-tenant-diary-assistant/
+├── backend/              # Backend application (FastAPI)
+│   ├── app/             # Application code
+│   └── alembic/         # Database migrations
+├── frontend/             # Frontend application (Streamlit)
+├── tests/                # Test suite
+├── docs/                 # Documentation
+├── scripts/              # Utility scripts
+├── infrastructure/       # Infrastructure configs
+└── pipelines/            # Data pipelines
+```
+
+See [Project Structure](PROJECT_STRUCTURE.md) for detailed organization.
 
 ## 📚 Documentation
 
 All documentation is organized in the [`docs/`](docs/) directory:
 
+### Quick Links
 - **[Quick Start](docs/QUICK_START.md)** - Get running in 5 minutes
 - **[Setup Guide](docs/SETUP.md)** - Complete setup instructions
+- **[User Guide](USAGE_GUIDE.md)** - How to use the application
+- **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
+
+### Developer Resources
+- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute
+- **[Project Structure](PROJECT_STRUCTURE.md)** - Repository organization
+- **[Changelog](CHANGELOG.md)** - Version history
+
+### Security & Configuration
 - **[Security Guide](docs/SECURITY.md)** - Security best practices
 - **[API Key Setup](docs/API_KEY_SETUP.md)** - Configure API keys
 - **[CI/CD Guide](docs/CI_CD.md)** - GitHub Actions setup
-- **[Usage Guide](USAGE_GUIDE.md)** - How to use the application
-- **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
 
 See [Documentation Index](docs/README.md) for complete list.
 
+## 🧪 Testing
+
+```bash
+# Run all tests
+make test
+
+# Run with coverage
+pytest tests/ -v --cov=backend.app --cov-report=html
+
+# Run specific test file
+pytest tests/unit/test_auth.py -v
+```
+
+## 🚢 Deployment
+
+### GitHub Actions (Automatic)
+
+1. Push code to `main` branch → Staging deployment
+2. Tag version `v1.0.0` → Production deployment
+
+See [CI/CD Guide](docs/CI_CD.md) for details.
+
+### Manual Deployment
+
+```bash
+cd infrastructure/docker
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+See [Deployment Guide](DEPLOYMENT.md) for complete instructions.
+
 ## 🤝 Contributing
 
-Contributions are welcome! To contribute:
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
 
-1. Fork the repository and create a new branch
-2. Make your changes with clear commits
-3. Ensure tests pass: `pytest backend/app/tests/`
-4. Update documentation as needed
-5. Open a pull request describing your changes
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add: amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📋 Tech Stack
 
-This project is licensed under the MIT License.  See the [LICENSE](LICENSE) file for details.
+- **Backend:** FastAPI, SQLAlchemy, PostgreSQL, Redis
+- **Frontend:** Streamlit, Pandas, Matplotlib
+- **AI/ML:** OpenAI API, LangChain, FAISS
+- **Infrastructure:** Docker, Docker Compose, GitHub Actions
+- **Testing:** Pytest, Coverage
+- **Code Quality:** Black, Flake8, MyPy, Pre-commit
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- FastAPI for the excellent web framework
+- Streamlit for the frontend framework
+- OpenAI for the LLM capabilities
+- FAISS for vector search
+
+## 📞 Support
+
+- **Issues:** [GitHub Issues](https://github.com/sharathd4179/Multi-Tenant-Digital-Diary-Platform/issues)
+- **Documentation:** [docs/](docs/)
+- **Discussions:** [GitHub Discussions](https://github.com/sharathd4179/Multi-Tenant-Digital-Diary-Platform/discussions)
+
+---
+
+**Made with ❤️ for multi-tenant diary management**

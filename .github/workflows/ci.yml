@@ -85,7 +85,15 @@ jobs:
         ENVIRONMENT: test
       run: |
         cd multi-tenant-diary-assistant
-        pytest backend/app/tests/ -v --cov=backend/app --cov-report=xml --cov-report=term
+        # Run tests from new location, fallback to old location if needed
+        if [ -d "tests/unit" ]; then
+          pytest tests/unit/ -v --cov=backend/app --cov-report=xml --cov-report=term
+        elif [ -d "backend/app/tests" ]; then
+          pytest backend/app/tests/ -v --cov=backend/app --cov-report=xml --cov-report=term
+        else
+          echo "No tests found"
+          exit 1
+        fi
 
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
@@ -112,7 +120,7 @@ jobs:
         context: ./multi-tenant-diary-assistant
         file: ./multi-tenant-diary-assistant/backend/Dockerfile
         push: false
-        tags: diary-assistant-backend:test
+        tags: multi-tenant-diary-backend:test
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -122,12 +130,21 @@ jobs:
         context: ./multi-tenant-diary-assistant
         file: ./multi-tenant-diary-assistant/frontend/Dockerfile
         push: false
-        tags: diary-assistant-frontend:test
+        tags: multi-tenant-diary-frontend:test
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
     - name: Test Docker Compose
       run: |
-        cd multi-tenant-diary-assistant/infra
+        cd multi-tenant-diary-assistant
+        # Test docker-compose from new location, fallback to old location
+        if [ -d "infrastructure/docker" ]; then
+          cd infrastructure/docker
+        elif [ -d "infra" ]; then
+          cd infra
+        else
+          echo "Docker compose directory not found"
+          exit 1
+        fi
         docker-compose config
 

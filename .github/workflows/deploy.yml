@@ -19,6 +19,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  # Repository: sharathd4179/Multi-Tenant-Digital-Diary-Platform
+  # Images will be: ghcr.io/sharathd4179/Multi-Tenant-Digital-Diary-Platform-backend
 
 jobs:
   deploy-staging:
