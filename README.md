@@ -132,7 +132,7 @@ multi-tenant-diary-assistant/
 └── pipelines/            # Data pipelines
 ```
 
-See [Project Structure](PROJECT_STRUCTURE.md) for detailed organization.
+See [Documentation Index](docs/README.md) for detailed project organization.
 
 ## 📚 Documentation
 
@@ -141,20 +141,21 @@ All documentation is organized in the [`docs/`](docs/) directory:
 ### Quick Links
 - **[Quick Start](docs/QUICK_START.md)** - Get running in 5 minutes
 - **[Setup Guide](docs/SETUP.md)** - Complete setup instructions
-- **[User Guide](USAGE_GUIDE.md)** - How to use the application
-- **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
+- **[Usage Guide](docs/guides/USAGE.md)** - How to use the application
+- **[Deployment Guide](docs/deployment/DEPLOYMENT.md)** - Production deployment
 
 ### Developer Resources
 - **[Contributing Guide](CONTRIBUTING.md)** - How to contribute
-- **[Project Structure](PROJECT_STRUCTURE.md)** - Repository organization
 - **[Changelog](CHANGELOG.md)** - Version history
+- **[Project Structure](docs/README.md#project-structure)** - Repository organization
 
 ### Security & Configuration
-- **[Security Guide](docs/SECURITY.md)** - Security best practices
+- **[Security Guide](docs/SECURITY.md)** - Security best practices & API key management
 - **[API Key Setup](docs/API_KEY_SETUP.md)** - Configure API keys
 - **[CI/CD Guide](docs/CI_CD.md)** - GitHub Actions setup
 
-See [Documentation Index](docs/README.md) for complete list.
+### Complete Documentation
+See [Documentation Index](docs/README.md) for the complete list of all guides.
 
 ## 🧪 Testing
 
@@ -185,7 +186,7 @@ cd infrastructure/docker
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-See [Deployment Guide](DEPLOYMENT.md) for complete instructions.
+See [Deployment Guide](docs/deployment/DEPLOYMENT.md) for complete instructions.
 
 ## 🤝 Contributing
 
